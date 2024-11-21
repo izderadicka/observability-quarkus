@@ -15,6 +15,7 @@
     <!-- list your sub-modules here -->
     <module>entry</module>
     <module>sensor</module>
+    <module>store</module>
   </modules>
 
   <build>
