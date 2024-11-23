@@ -3,7 +3,9 @@ package eu.zderadicka;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import eu.zderadicka.client.SensorClient;
+import eu.zderadicka.client.StoreClient;
 import eu.zderadicka.model.Measurement;
+import eu.zderadicka.model.TimedSample;
 import io.quarkus.logging.Log;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
@@ -18,14 +20,25 @@ public class MeasurementResource {
     @Inject
     SensorClient sensorClient;
 
+    @RestClient
+    @Inject
+    StoreClient storeClient;
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Measurement entry() {
-        var now = java.time.Instant.now();
 
         var value = sensorClient.sample();
+        var sample = TimedSample.from(value);
         Log.infof("Got Value: %s", value.value());
 
-        return new Measurement(value.value(), value.unit(), -49.1, 56.3, 29.0, now, null, null);
+        storeClient.create(sample);
+
+        var stats = storeClient.stats(value.unit());
+        Log.infof("Got Stats: %s", stats);
+
+        var measurement = Measurement.from(sample, stats);
+
+        return measurement;
     }
 }
