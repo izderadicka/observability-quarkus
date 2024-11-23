@@ -16,6 +16,7 @@
     <module>entry</module>
     <module>sensor</module>
     <module>store</module>
+    <module>client</module>
   </modules>
 
   <build>
