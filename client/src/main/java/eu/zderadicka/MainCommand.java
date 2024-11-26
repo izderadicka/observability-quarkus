@@ -9,7 +9,6 @@ import eu.zderadicka.client.MeasurementClient;
 import io.quarkus.logging.Log;
 import jakarta.inject.Inject;
 import picocli.CommandLine.Command;
-import picocli.CommandLine.Parameters;
 
 @Command(name = "main", mixinStandardHelpOptions = true)
 public class MainCommand implements Runnable {
@@ -24,18 +23,26 @@ public class MainCommand implements Runnable {
     @ConfigProperty(name = "client.stddev-sleep", defaultValue = "10")
     double stddev;
 
+    void sleep(Random rand) {
+        double sleep = mean + (rand.nextGaussian() * stddev);
+        if (sleep < 0) {
+            sleep = 0;
+        } else if (sleep > mean + 2 * stddev) {
+            sleep = mean + 2 * stddev;
+
+        }
+        Log.infof("Will sleep for %f seconds", sleep);
+        try {
+            Thread.sleep((long) sleep * 1000);
+        } catch (InterruptedException e) {
+        }
+    }
+
     @Override
     public void run() {
         Random rand = new Random();
         while (true) {
-
-            double sleep = mean + (rand.nextGaussian() * stddev);
-            Log.infof("Will sleep for %f seconds", sleep);
-            try {
-                Thread.sleep((long) sleep * 1000);
-            } catch (InterruptedException e) {
-            }
-
+            sleep(rand);
             try {
                 var measurement = client.getMeasurement();
                 Log.infof("Received measurement: %s", measurement);
