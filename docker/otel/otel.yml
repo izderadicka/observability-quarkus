@@ -53,18 +53,23 @@ receivers:
                 service: 'grafana'
                 group: 'infrastructure'
 
-        # Scrape from the Mythical Server and Requester service.
-        # - job_name: 'mythical'
-        #   scrape_interval: 2s
-        #   static_configs:
-        #     - targets: ['mythical-server:4000']
-        #       labels:
-        #         service: 'mythical-server'
-        #         group: 'mythical'
-        #     - targets: ['mythical-requester:4001']
-        #       labels:
-        #         service: 'mythical-requester'
-        #         group: 'mythical'
+        # Scrape from the demo application services
+        - job_name: 'demo-app'
+          scrape_interval: 2s
+          metrics_path: "/q/metrics"
+          static_configs:
+            - targets: ['entry:5500']
+              labels:
+                service: 'entry'
+                group: 'demo-app'
+            - targets: ['sensor:5501']
+              labels:
+                service: 'sensor'
+                group: 'demo-app'
+            - targets: ['store:5502']
+              labels:
+                service: 'store'  
+                group: 'demo-app'
 
         
 

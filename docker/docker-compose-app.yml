@@ -1,0 +1,23 @@
+name: grafana-with-otel
+
+services:
+  entry:
+    image: izderadicka/entry-service:latest
+    ports:
+      - 6500:5500
+    depends_on:
+      - sensor
+      - store
+  sensor:
+    image: izderadicka/sensor:latest
+    ports:
+      - 6501:5501
+  store:
+    image: izderadicka/store:latest
+    ports:
+      - 6502:5502
+  client:
+    image: izderadicka/client:latest
+    environment:
+      - CLIENT_SLEEP_MEAN=5
+      - CLIENT_SLEEP_STDDEV=2

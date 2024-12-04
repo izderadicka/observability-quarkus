@@ -17,10 +17,10 @@ public class MainCommand implements Runnable {
     @Inject
     MeasurementClient client;
 
-    @ConfigProperty(name = "client.mean-sleep", defaultValue = "30")
+    @ConfigProperty(name = "client.sleep.mean", defaultValue = "30")
     double mean;
 
-    @ConfigProperty(name = "client.stddev-sleep", defaultValue = "10")
+    @ConfigProperty(name = "client.sleep.stddev", defaultValue = "10")
     double stddev;
 
     void sleep(Random rand) {
