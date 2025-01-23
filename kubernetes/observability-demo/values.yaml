@@ -1,0 +1,7 @@
+otel_collector:
+  url: "http://tempo-sample-distributor.tracing-demo.svc.cluster.local:4317"
+
+client:
+  enabled: true
+  sleepMean: 30
+  sleepStddev: 10

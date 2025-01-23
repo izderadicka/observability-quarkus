@@ -19,6 +19,11 @@ mvn install -Dquarkus.container-image.build=true
 
 ```
 
+to push do docker io (to other registry use quarkus.container-image.registry)
+```
+mvn install -Dquarkus.container-image.build=true -Dquarkus.container-image.push=true
+```
+
 # How to run
 
 First build app. images as shown above.
@@ -26,7 +31,7 @@ First build app. images as shown above.
 ```
 cd docker 
 
-docker compose -f docker-compose.yaml -f docker-compose-app.yaml up -d
+docker compose -f docker-compose.yml -f docker-compose-app.yml up -d
 ```
 
 This will run both observability Graphana infrastructure and the demo application. You can run them also separatelly - one after one.

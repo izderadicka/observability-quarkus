@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  store
+  labels:
+    app:  store
+spec:
+  selector:
+    matchLabels:
+      app: store
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app:  store
+    spec:
+      containers:
+      - name:  store
+        image:  izderadicka/store:latest
+        resources:
+          requests:
+            cpu: 100m
+            memory: 500Mi
+          limits:
+            cpu: 200m
+            memory: 1000Mi
+        livenessProbe:
+          httpGet:
+            path: /q/health/live
+            port: 5502
+          initialDelaySeconds: 15
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /q/health/ready
+            port: 5502
+          initialDelaySeconds: 15
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 5
+          periodSeconds: 10
+        ports:
+        - containerPort:  5502
+          name:  http-rest-api
+        env:
+        - name: QUARKUS_OTEL_EXPORTER_OTLP_ENDPOINT
+          value: {{ .Values.otel_collector.url }}
+      restartPolicy: Always

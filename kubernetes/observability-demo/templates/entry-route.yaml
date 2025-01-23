@@ -1,0 +1,10 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: entry
+spec:
+  to:
+    kind: Service
+    name: entry
+  port:
+    targetPort: http-rest-api

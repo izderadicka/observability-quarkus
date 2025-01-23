@@ -1,0 +1,25 @@
+{{ if .Values.client.enabled }}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "client"
+  labels:
+    app: "client"
+spec:
+  containers:
+  - name: client
+    image: "izderadicka/client:latest"
+    resources:
+      limits:
+        cpu: 200m
+        memory: 500Mi
+      requests:
+        cpu: 100m
+        memory: 200Mi
+    env:
+    - name: CLIENT_SLEEP_MEAN
+      value: "{{ .Values.client.sleepMean }}"
+    - name: CLIENT_SLEEP_STDDEV
+      value: "{{ .Values.client.sleepStddev }}"
+  restartPolicy: Always
+{{ end }}
